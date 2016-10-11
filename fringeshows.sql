@@ -207,11 +207,11 @@ INSERT INTO "shows_users" (show_id, user_id) VALUES (11, 21);
 
   -- 9. Select the names and prices of all shows, ordered by price in ascending order.
 
-    SELECT price, name FROM shows ORDER BY (price = 6.00) DESC, price;
+    SELECT price, name FROM shows ORDER BY price DESC, price;
 
   -- 10. Select the average price of all shows.
 
-    SELECT AVG (price) FROM shows;
+    SELECT ROUND(AVG(price), 2) FROM shows;
 
   -- 11. Select the price of the least expensive show.
 
@@ -235,7 +235,7 @@ INSERT INTO "shows_users" (show_id, user_id) VALUES (11, 21);
 
   -- 16. Select the names of all users whose names start with the letter "N".
 
-    SELECT (name) FROM users WHERE (name) LIKE 'n%';
+    SELECT (name) FROM users WHERE (name) LIKE 'N%';
 
   -- 17. Select the names of users whose names contain "er".
 
@@ -251,17 +251,15 @@ INSERT INTO "shows_users" (show_id, user_id) VALUES (11, 21);
 
   -- 19. Select the number of users who want to see "Shitfaced Shakespeare".
 
-    SELECT shows_users.show_id from shows_users INNER JOIN shows on shows.id = shows_users.show_id WHERE shows.name = 'Shitfaced Shakespeare';
+    SELECT COUNT(shows_users.user_id) from shows_users INNER JOIN shows on shows.id = shows_users.show_id WHERE shows.name = 'Shitfaced Shakespeare';
 
   -- 20. Select all of the user names and the count of shows they're going to see.
 
     SELECT name, count(user_id) FROM users 
       INNER JOIN shows_users 
       ON shows_users.user_id = users.id 
-      GROUP BY name;
+      GROUP BY name ORDER BY count;
 
   -- 21. SELECT all users who are going to a show at 17:15.
 
-    -- SELECT id FROM users
-    --   INNER JOIN times
-    --   ON time = time.id   WHERE time.time = '17.15'
+    SELECT users.name FROM shows_users INNER JOIN users ON shows_users.user_id = users.id INNER JOIN times ON shows_users.show_id = times.show_id WHERE times.time = '17:15'
